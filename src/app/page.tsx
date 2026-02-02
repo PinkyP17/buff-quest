@@ -45,38 +45,28 @@ export default function Dashboard() {
   const xpProgress = Math.min((totalXp / xpForNextLevel) * 100, 100);
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:20px_20px] bg-white text-gray-900 p-4 pb-24">
-      {/* Character Card */}
-      <section className="bg-white rounded-2xl border-2 border-gray-300 shadow-lg mb-6 p-4 flex gap-4">
-        {/* Character Image */}
-        <div className="w-28 h-36 bg-gray-100 rounded-xl border-2 border-gray-300 flex items-center justify-center overflow-hidden">
-          <Image
-            src="/character-placeholder.png"
-            alt="Character"
-            width={100}
-            height={130}
-            className="object-contain"
-          />
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 pb-20">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Your Hero</h1>
+          <p className="text-slate-400 text-sm">Level 1 Novice</p>
         </div>
+        <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center font-bold">
+          {/* Initials placeholder */}H
+        </div>
+      </header>
 
-        {/* Player Info */}
-        <div className="flex-1 flex flex-col justify-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">{username}</h1>
-          <p className="text-gray-500 text-sm mb-3">Level 1</p>
+      {/* THE VISUAL STAGE (Placeholder for your Art) */}
+      <section className="bg-slate-900 rounded-2xl aspect-[4/5] border border-slate-800 mb-6 flex items-center justify-center relative overflow-hidden shadow-2xl">
+        {/* This is where your layered SVGs will go later */}
+        <p className="text-slate-500 text-xs uppercase tracking-widest">
+          Character Visualizer
+        </p>
 
-          {/* XP Bar */}
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Exp</p>
-            <div className="h-3 bg-gray-200 rounded-full overflow-hidden border border-gray-300">
-              <div
-                className="h-full bg-green-500 rounded-full transition-all duration-500"
-                style={{ width: `${xpProgress}%` }}
-              />
-            </div>
-            <p className="text-xs text-gray-400 mt-1">
-              {totalXp} / {xpForNextLevel}
-            </p>
-          </div>
+        {/* Debugging: Show that data is real */}
+        <div className="absolute bottom-4 left-4 bg-black/50 p-2 rounded text-xs">
+          Streak: {stats.current_streak} Days
         </div>
       </section>
 

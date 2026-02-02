@@ -1,20 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 
 export default function AuthForm() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
+
+  // Check for error in URL params (from auth callback)
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError(errorParam);
+    }
+  }, [searchParams]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +37,16 @@ export default function AuthForm() {
         password,
         options: {
           data: { username: email.split("@")[0] },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-      if (error) setError(error.message);
-      else setError("Check your email for the confirmation link!");
+      if (error) {
+        setError(error.message);
+        setMessage(null);
+      } else {
+        setError(null);
+        setMessage("Check your email for the confirmation link!");
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -100,6 +116,12 @@ export default function AuthForm() {
           </div>
         )}
 
+        {message && (
+          <div className="bg-green-100 border border-green-300 text-green-600 text-sm p-3 rounded-lg">
+            {message}
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={loading}
@@ -130,11 +152,10 @@ export default function AuthForm() {
         </span>
       </div>
 
-      {/* Animated Icons - Polyrhythm Version */}
-      {/* added 'pb-12' to make room for high jumps */}
-      <div className="flex items-end justify-center gap-8 overflow-visible pb-12 px-12">
-        {/* D20 Dice - The Hyperactive One */}
-        <div className="animate-chaos" style={{ animationDuration: "3s" }}>
+      {/* Animated Icons */}
+      <div className="flex items-end justify-center gap-6 overflow-visible">
+        {/* D20 Dice */}
+        <div style={{ animation: "rabbit-hop-1 4s ease-in-out infinite" }}>
           <Image
             src="/dice-icon.png"
             alt="D20 Dice"
@@ -144,12 +165,11 @@ export default function AuthForm() {
           />
         </div>
 
-        {/* Dumbbell - The Heavy One (Slower) */}
+        {/* Dumbbell */}
         <div
-          className="animate-chaos"
           style={{
-            animationDuration: "5s",
-            animationDelay: "1s", // Start later
+            animation: "rabbit-hop-2 4s ease-in-out infinite",
+            animationDelay: "0.3s",
           }}
         >
           <Image
@@ -161,12 +181,11 @@ export default function AuthForm() {
           />
         </div>
 
-        {/* Flame - The Erratic One */}
+        {/* Flame */}
         <div
-          className="animate-chaos"
           style={{
-            animationDuration: "4.2s",
-            animationDelay: "0.5s",
+            animation: "rabbit-hop-3 4s ease-in-out infinite",
+            animationDelay: "0.6s",
           }}
         >
           <Image
