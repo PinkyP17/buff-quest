@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom animations */
+  --animate-bounce-flip-left: bounce-flip-left 1.2s ease-in-out infinite;
+  --animate-bounce-flip-center: bounce-flip-center 1.2s ease-in-out infinite;
+  --animate-bounce-flip-right: bounce-flip-right 1.2s ease-in-out infinite;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +28,98 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Bounce and flip animations for login page icons */
+@keyframes bounce-flip-left {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  25% {
+    transform: translateY(-12px) scaleX(1);
+  }
+  50% {
+    transform: translateY(0) scaleX(-1);
+  }
+  75% {
+    transform: translateY(-8px) scaleX(-1);
+  }
+}
+
+@keyframes bounce-flip-center {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  25% {
+    transform: translateY(-16px) scaleX(1);
+  }
+  50% {
+    transform: translateY(0) scaleX(-1);
+  }
+  75% {
+    transform: translateY(-10px) scaleX(-1);
+  }
+}
+
+@keyframes bounce-flip-right {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  25% {
+    transform: translateY(-12px) scaleX(1);
+  }
+  50% {
+    transform: translateY(0) scaleX(-1);
+  }
+  75% {
+    transform: translateY(-8px) scaleX(-1);
+  }
+}
+
+/* NEW CHAOS ANIMATIONS */
+@keyframes chaos-jump {
+  /* Start on ground */
+  0% {
+    transform: translate(0, 0) rotate(0deg) scaleX(1);
+  }
+
+  /* Jump 1: High jump to the left */
+  15% {
+    transform: translate(-20px, -40px) rotate(-10deg) scaleX(1);
+  }
+  30% {
+    transform: translate(-10px, 0) rotate(0deg) scaleX(1);
+  }
+
+  /* Jump 2: Small hop in place */
+  40% {
+    transform: translate(-10px, -15px) rotate(5deg) scaleX(1);
+  }
+  50% {
+    transform: translate(0, 0) rotate(0deg) scaleX(1);
+  }
+
+  /* Jump 3: HUGE jump to the right (Out of layout?) */
+  65% {
+    transform: translate(30px, -60px) rotate(15deg) scaleX(-1);
+  } /* Flip direction! */
+  80% {
+    transform: translate(15px, 0) rotate(0deg) scaleX(-1);
+  }
+
+  /* Jump 4: Quick hop back to center */
+  90% {
+    transform: translate(5px, -10px) rotate(-5deg) scaleX(1);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scaleX(1);
+  }
+}
+
+/* Define the class */
+.animate-chaos {
+  animation: chaos-jump infinite ease-in-out;
 }
