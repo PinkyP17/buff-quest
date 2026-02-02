@@ -1,20 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 
 export default function AuthForm() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
+
+  // Check for error in URL params (from auth callback)
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError(errorParam);
+    }
+  }, [searchParams]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +37,16 @@ export default function AuthForm() {
         password,
         options: {
           data: { username: email.split("@")[0] },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-      if (error) setError(error.message);
-      else setError("Check your email for the confirmation link!");
+      if (error) {
+        setError(error.message);
+        setMessage(null);
+      } else {
+        setError(null);
+        setMessage("Check your email for the confirmation link!");
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -97,6 +113,12 @@ export default function AuthForm() {
         {error && (
           <div className="bg-red-100 border border-red-300 text-red-600 text-sm p-3 rounded-lg">
             {error}
+          </div>
+        )}
+
+        {message && (
+          <div className="bg-green-100 border border-green-300 text-green-600 text-sm p-3 rounded-lg">
+            {message}
           </div>
         )}
 
