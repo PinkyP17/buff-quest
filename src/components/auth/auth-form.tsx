@@ -131,7 +131,7 @@ export default function AuthForm() {
       {/* Animated Icons */}
       <div className="flex items-end justify-center gap-6 overflow-visible">
         {/* D20 Dice */}
-        <div className="animate-rabbit-hop-1">
+        <div style={{ animation: "rabbit-hop-1 4s ease-in-out infinite" }}>
           <Image
             src="/dice-icon.png"
             alt="D20 Dice"
@@ -142,7 +142,7 @@ export default function AuthForm() {
         </div>
 
         {/* Dumbbell */}
-        <div className="animate-rabbit-hop-2" style={{ animationDelay: "0.2s" }}>
+        <div style={{ animation: "rabbit-hop-2 4s ease-in-out infinite", animationDelay: "0.3s" }}>
           <Image
             src="/dumbbell-icon.png"
             alt="Dumbbell"
@@ -153,7 +153,7 @@ export default function AuthForm() {
         </div>
 
         {/* Flame */}
-        <div className="animate-rabbit-hop-3" style={{ animationDelay: "0.4s" }}>
+        <div style={{ animation: "rabbit-hop-3 4s ease-in-out infinite", animationDelay: "0.6s" }}>
           <Image
             src="/flame-icon.png"
             alt="Flame"
