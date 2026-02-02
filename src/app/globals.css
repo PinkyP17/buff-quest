@@ -11,10 +11,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* Custom animations */
-  --animate-bounce-flip-left: bounce-flip-left 1.2s ease-in-out infinite;
-  --animate-bounce-flip-center: bounce-flip-center 1.2s ease-in-out infinite;
-  --animate-bounce-flip-right: bounce-flip-right 1.2s ease-in-out infinite;
+  /* Custom animations - rabbit hop style */
+  --animate-rabbit-hop-1: rabbit-hop-1 4s ease-in-out infinite;
+  --animate-rabbit-hop-2: rabbit-hop-2 4s ease-in-out infinite;
+  --animate-rabbit-hop-3: rabbit-hop-3 4s ease-in-out infinite;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,48 +30,186 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Bounce and flip animations for login page icons */
-@keyframes bounce-flip-left {
-  0%, 100% {
-    transform: translateY(0) scaleX(1);
+/* Rabbit hop animations - varied jumps, occasional flips, moves left and back */
+@keyframes rabbit-hop-1 {
+  0% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
+  /* Small hop */
+  5% {
+    transform: translateX(-8px) translateY(-15px) scaleX(1);
+  }
+  10% {
+    transform: translateX(-16px) translateY(0) scaleX(1);
+  }
+  /* Big hop */
+  15% {
+    transform: translateX(-30px) translateY(-35px) scaleX(1);
+  }
+  20% {
+    transform: translateX(-50px) translateY(0) scaleX(1);
+  }
+  /* Small hop + flip to face right */
   25% {
-    transform: translateY(-12px) scaleX(1);
+    transform: translateX(-60px) translateY(-12px) scaleX(-1);
+  }
+  30% {
+    transform: translateX(-50px) translateY(0) scaleX(-1);
+  }
+  /* Jump back toward center - big hop */
+  35% {
+    transform: translateX(-30px) translateY(-30px) scaleX(-1);
+  }
+  40% {
+    transform: translateX(-10px) translateY(0) scaleX(-1);
+  }
+  /* Small hop */
+  45% {
+    transform: translateX(0) translateY(-10px) scaleX(-1);
   }
   50% {
-    transform: translateY(0) scaleX(-1);
+    transform: translateX(5px) translateY(0) scaleX(-1);
+  }
+  /* Flip back to face left + small hop */
+  55% {
+    transform: translateX(0) translateY(-8px) scaleX(1);
+  }
+  60% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  /* Rest and tiny bounces */
+  70% {
+    transform: translateX(0) translateY(-5px) scaleX(1);
   }
   75% {
-    transform: translateY(-8px) scaleX(-1);
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  85% {
+    transform: translateX(0) translateY(-3px) scaleX(1);
+  }
+  100% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
 }
 
-@keyframes bounce-flip-center {
-  0%, 100% {
-    transform: translateY(0) scaleX(1);
+@keyframes rabbit-hop-2 {
+  0% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
+  /* Big hop first */
+  5% {
+    transform: translateX(-15px) translateY(-40px) scaleX(1);
+  }
+  10% {
+    transform: translateX(-35px) translateY(0) scaleX(1);
+  }
+  /* Small hop */
+  15% {
+    transform: translateX(-45px) translateY(-12px) scaleX(1);
+  }
+  20% {
+    transform: translateX(-55px) translateY(0) scaleX(1);
+  }
+  /* Flip and tiny hop */
   25% {
-    transform: translateY(-16px) scaleX(1);
+    transform: translateX(-60px) translateY(-8px) scaleX(-1);
+  }
+  30% {
+    transform: translateX(-55px) translateY(0) scaleX(-1);
+  }
+  /* Big hop back */
+  35% {
+    transform: translateX(-35px) translateY(-38px) scaleX(-1);
+  }
+  40% {
+    transform: translateX(-10px) translateY(0) scaleX(-1);
+  }
+  /* Small hop */
+  45% {
+    transform: translateX(-5px) translateY(-15px) scaleX(-1);
   }
   50% {
-    transform: translateY(0) scaleX(-1);
+    transform: translateX(8px) translateY(0) scaleX(-1);
   }
-  75% {
-    transform: translateY(-10px) scaleX(-1);
+  /* Flip back + hop */
+  55% {
+    transform: translateX(5px) translateY(-20px) scaleX(1);
+  }
+  60% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  /* Idle bounces */
+  68% {
+    transform: translateX(0) translateY(-6px) scaleX(1);
+  }
+  72% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  80% {
+    transform: translateX(0) translateY(-4px) scaleX(1);
+  }
+  100% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
 }
 
-@keyframes bounce-flip-right {
-  0%, 100% {
-    transform: translateY(0) scaleX(1);
+@keyframes rabbit-hop-3 {
+  0% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
+  /* Small hop */
+  5% {
+    transform: translateX(-10px) translateY(-18px) scaleX(1);
+  }
+  10% {
+    transform: translateX(-20px) translateY(0) scaleX(1);
+  }
+  /* Another small hop */
+  15% {
+    transform: translateX(-28px) translateY(-14px) scaleX(1);
+  }
+  20% {
+    transform: translateX(-40px) translateY(0) scaleX(1);
+  }
+  /* Big hop to edge */
   25% {
-    transform: translateY(-12px) scaleX(1);
+    transform: translateX(-55px) translateY(-32px) scaleX(1);
+  }
+  30% {
+    transform: translateX(-65px) translateY(0) scaleX(1);
+  }
+  /* Flip + small hop */
+  35% {
+    transform: translateX(-60px) translateY(-10px) scaleX(-1);
+  }
+  40% {
+    transform: translateX(-50px) translateY(0) scaleX(-1);
+  }
+  /* Big hop back */
+  45% {
+    transform: translateX(-25px) translateY(-35px) scaleX(-1);
   }
   50% {
-    transform: translateY(0) scaleX(-1);
+    transform: translateX(0) translateY(0) scaleX(-1);
   }
-  75% {
-    transform: translateY(-8px) scaleX(-1);
+  /* Tiny hop + flip */
+  55% {
+    transform: translateX(5px) translateY(-6px) scaleX(1);
+  }
+  60% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  /* Rest with small bounces */
+  72% {
+    transform: translateX(0) translateY(-7px) scaleX(1);
+  }
+  76% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  88% {
+    transform: translateX(0) translateY(-4px) scaleX(1);
+  }
+  100% {
+    transform: translateX(0) translateY(0) scaleX(1);
   }
 }
