@@ -1,19 +1,30 @@
-"use client"; // This is a Client Component because it uses state (useState)
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function AuthForm() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false); // Toggle between Login and Sign Up
+  const [message, setMessage] = useState<string | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  // Check for error in URL params (from auth callback)
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError(errorParam);
+    }
+  }, [searchParams]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,79 +32,100 @@ export default function AuthForm() {
     setError(null);
 
     if (isSignUp) {
-      // 1. Handle Sign Up
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          // This saves the username to the 'profiles' table via our trigger
           data: { username: email.split("@")[0] },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-      if (error) setError(error.message);
-      else setError("Check your email for the confirmation link!");
+      if (error) {
+        setError(error.message);
+        setMessage(null);
+      } else {
+        setError(null);
+        setMessage("Check your email for the confirmation link!");
+      }
     } else {
-      // 2. Handle Login
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) setError(error.message);
-      else router.push("/"); // Redirect to home on success
+      else router.push("/");
     }
     setLoading(false);
   };
 
   return (
-    <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-xl shadow-2xl">
-      <div className="text-center mb-8">
-        <ShieldCheck className="w-12 h-12 text-indigo-500 mx-auto mb-2" />
-        <h2 className="text-2xl font-bold text-white">
-          {isSignUp ? "Join the Guild" : "Welcome Back"}
-        </h2>
-        <p className="text-slate-400 text-sm">
-          {isSignUp
-            ? "Start your fitness journey today."
-            : "Login to track your stats."}
-        </p>
+    <div className="w-full max-w-sm flex flex-col items-center">
+      {/* Logo */}
+      <div className="mb-2">
+        <Image
+          src="/buff-quest-logo.png"
+          alt="Buff Quest Logo"
+          width={180}
+          height={120}
+          className="object-contain"
+          priority
+        />
       </div>
 
-      <form onSubmit={handleAuth} className="space-y-4">
+      {/* Title */}
+      <h1 className="text-4xl font-black mb-8 tracking-wide">
+        <span className="text-slate-800 drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] [-webkit-text-stroke:2px_black]">
+          Buff
+        </span>
+        <span className="mx-4"></span>
+        <span className="text-slate-800 drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] [-webkit-text-stroke:2px_black]">
+          Quest
+        </span>
+      </h1>
+
+      {/* Form */}
+      <form onSubmit={handleAuth} className="w-full space-y-4 mb-4">
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1 uppercase tracking-wider">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Email
           </label>
           <input
             type="email"
             required
-            className="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+            className="w-full bg-white border-2 border-slate-300 text-slate-900 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none transition-all"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-400 mb-1 uppercase tracking-wider">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Password
           </label>
           <input
             type="password"
             required
-            className="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+            className="w-full bg-white border-2 border-slate-300 text-slate-900 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none transition-all"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg">
+          <div className="bg-red-100 border border-red-300 text-red-600 text-sm p-3 rounded-lg">
             {error}
+          </div>
+        )}
+
+        {message && (
+          <div className="bg-green-100 border border-green-300 text-green-600 text-sm p-3 rounded-lg">
+            {message}
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg transition-all flex items-center justify-center disabled:opacity-50"
+          className="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2.5 px-4 rounded-lg transition-all flex items-center justify-center disabled:opacity-50 border-2 border-slate-300"
         >
           {loading ? (
             <Loader2 className="animate-spin w-5 h-5" />
@@ -105,15 +137,53 @@ export default function AuthForm() {
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      {/* Sign Up Toggle */}
+      <div className="mb-8 text-center">
         <button
           onClick={() => setIsSignUp(!isSignUp)}
-          className="text-slate-400 hover:text-indigo-400 text-sm transition-colors"
+          className="text-red-500 hover:text-red-600 font-semibold transition-colors"
         >
-          {isSignUp
-            ? "Already have an account? Login"
-            : "Don't have an account? Sign Up"}
+          {isSignUp ? "Login" : "Sign up"}
         </button>
+        <span className="text-slate-600 ml-1">
+          {isSignUp ? " Already have an account!" : " Shadow Wizard Money Gang!"}
+        </span>
+      </div>
+
+      {/* Animated Icons */}
+      <div className="flex items-end justify-center gap-6 overflow-visible">
+        {/* D20 Dice */}
+        <div style={{ animation: "rabbit-hop-1 4s ease-in-out infinite" }}>
+          <Image
+            src="/dice-icon.png"
+            alt="D20 Dice"
+            width={56}
+            height={56}
+            className="object-contain"
+          />
+        </div>
+
+        {/* Dumbbell */}
+        <div style={{ animation: "rabbit-hop-2 4s ease-in-out infinite", animationDelay: "0.3s" }}>
+          <Image
+            src="/dumbbell-icon.png"
+            alt="Dumbbell"
+            width={64}
+            height={64}
+            className="object-contain"
+          />
+        </div>
+
+        {/* Flame */}
+        <div style={{ animation: "rabbit-hop-3 4s ease-in-out infinite", animationDelay: "0.6s" }}>
+          <Image
+            src="/flame-icon.png"
+            alt="Flame"
+            width={56}
+            height={56}
+            className="object-contain"
+          />
+        </div>
       </div>
     </div>
   );
