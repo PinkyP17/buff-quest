@@ -1,83 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* "Paper" White Background - Warm and bright */
+  --background: #fdfbf7;
+  /* Dark text for contrast */
   --foreground: #171717;
+  --font-paper: "Fredoka", sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-paper);
 
-  /* Custom animations - rabbit hop style */
+  /* Rabbit animations */
   --animate-rabbit-hop-1: rabbit-hop-1 4s ease-in-out infinite;
   --animate-rabbit-hop-2: rabbit-hop-2 4s ease-in-out infinite;
   --animate-rabbit-hop-3: rabbit-hop-3 4s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* DELETED THE DARK MODE BLOCK HERE so it stays white */
+
+@layer utilities {
+  /* THE PAPER MARIO EFFECT */
+  .shadow-hard {
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+  .shadow-hard-lg {
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+  .border-sticker {
+    border: 3px solid white;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-paper);
 }
 
-/* Rabbit hop animations - varied jumps, occasional flips, moves left and back */
+/* --- ANIMATIONS --- */
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
 @keyframes rabbit-hop-1 {
   0% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Small hop */
   5% {
     transform: translateX(-8px) translateY(-15px) scaleX(1);
   }
   10% {
     transform: translateX(-16px) translateY(0) scaleX(1);
   }
-  /* Big hop */
   15% {
     transform: translateX(-30px) translateY(-35px) scaleX(1);
   }
   20% {
     transform: translateX(-50px) translateY(0) scaleX(1);
   }
-  /* Small hop + flip to face right */
   25% {
     transform: translateX(-60px) translateY(-12px) scaleX(-1);
   }
   30% {
     transform: translateX(-50px) translateY(0) scaleX(-1);
   }
-  /* Jump back toward center - big hop */
   35% {
     transform: translateX(-30px) translateY(-30px) scaleX(-1);
   }
   40% {
     transform: translateX(-10px) translateY(0) scaleX(-1);
   }
-  /* Small hop */
   45% {
     transform: translateX(0) translateY(-10px) scaleX(-1);
   }
   50% {
     transform: translateX(5px) translateY(0) scaleX(-1);
   }
-  /* Flip back to face left + small hop */
   55% {
     transform: translateX(0) translateY(-8px) scaleX(1);
   }
   60% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Rest and tiny bounces */
   70% {
     transform: translateX(0) translateY(-5px) scaleX(1);
   }
@@ -96,49 +110,42 @@ body {
   0% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Big hop first */
   5% {
     transform: translateX(-15px) translateY(-40px) scaleX(1);
   }
   10% {
     transform: translateX(-35px) translateY(0) scaleX(1);
   }
-  /* Small hop */
   15% {
     transform: translateX(-45px) translateY(-12px) scaleX(1);
   }
   20% {
     transform: translateX(-55px) translateY(0) scaleX(1);
   }
-  /* Flip and tiny hop */
   25% {
     transform: translateX(-60px) translateY(-8px) scaleX(-1);
   }
   30% {
     transform: translateX(-55px) translateY(0) scaleX(-1);
   }
-  /* Big hop back */
   35% {
     transform: translateX(-35px) translateY(-38px) scaleX(-1);
   }
   40% {
     transform: translateX(-10px) translateY(0) scaleX(-1);
   }
-  /* Small hop */
   45% {
     transform: translateX(-5px) translateY(-15px) scaleX(-1);
   }
   50% {
     transform: translateX(8px) translateY(0) scaleX(-1);
   }
-  /* Flip back + hop */
   55% {
     transform: translateX(5px) translateY(-20px) scaleX(1);
   }
   60% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Idle bounces */
   68% {
     transform: translateX(0) translateY(-6px) scaleX(1);
   }
@@ -157,49 +164,42 @@ body {
   0% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Small hop */
   5% {
     transform: translateX(-10px) translateY(-18px) scaleX(1);
   }
   10% {
     transform: translateX(-20px) translateY(0) scaleX(1);
   }
-  /* Another small hop */
   15% {
     transform: translateX(-28px) translateY(-14px) scaleX(1);
   }
   20% {
     transform: translateX(-40px) translateY(0) scaleX(1);
   }
-  /* Big hop to edge */
   25% {
     transform: translateX(-55px) translateY(-32px) scaleX(1);
   }
   30% {
     transform: translateX(-65px) translateY(0) scaleX(1);
   }
-  /* Flip + small hop */
   35% {
     transform: translateX(-60px) translateY(-10px) scaleX(-1);
   }
   40% {
     transform: translateX(-50px) translateY(0) scaleX(-1);
   }
-  /* Big hop back */
   45% {
     transform: translateX(-25px) translateY(-35px) scaleX(-1);
   }
   50% {
     transform: translateX(0) translateY(0) scaleX(-1);
   }
-  /* Tiny hop + flip */
   55% {
     transform: translateX(5px) translateY(-6px) scaleX(1);
   }
   60% {
     transform: translateX(0) translateY(0) scaleX(1);
   }
-  /* Rest with small bounces */
   72% {
     transform: translateX(0) translateY(-7px) scaleX(1);
   }
