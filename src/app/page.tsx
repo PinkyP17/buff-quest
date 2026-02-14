@@ -3,8 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProfile } from "@/lib/data";
-import { Home, Swords, User, Settings } from "lucide-react";
+import { Home, Swords, User, Calendar } from "lucide-react";
 import Image from "next/image";
+
+// Import Components
+import { QuestBoard } from "@/components/QuestBoard";
+import { StatCard } from "@/components/StatCard";
+import { NavItem } from "@/components/NavItem";
+import { StampRally } from "@/components/StampRally"; // <--- IMPORT THIS
 
 export default function Dashboard() {
   const router = useRouter();
@@ -14,12 +20,21 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadData() {
-      const data = await getProfile();
-      if (!data) {
+      const mockData = {
+        strength_xp: 45,
+        dexterity_xp: 70,
+        wisdom_xp: 20,
+        username: "Hero123",
+        streak: 4, // Mock streak data
+      };
+
+      const data = await getProfile().catch(() => mockData);
+
+      if (!data && !mockData) {
         router.push("/login");
       } else {
-        setStats(data);
-        setUsername(data.username || "Player");
+        setStats(data || mockData);
+        setUsername(data?.username || mockData.username || "Player");
         setLoading(false);
       }
     }
@@ -28,144 +43,97 @@ export default function Dashboard() {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:20px_20px] bg-white flex items-center justify-center text-gray-500">
-        Summoning Character...
+      <div className="min-h-screen bg-[#fdfbf7] flex items-center justify-center text-gray-500 font-bold text-xl tracking-wider">
+        Loading World...
       </div>
     );
 
-  // Calculate total XP for the progress bar
   const totalXp =
     (stats?.strength_xp || 0) +
     (stats?.dexterity_xp || 0) +
-    (stats?.constitution_xp || 0) +
-    (stats?.intelligence_xp || 0) +
     (stats?.wisdom_xp || 0) +
     (stats?.charisma_xp || 0);
-  const xpForNextLevel = 100;
-  const xpProgress = Math.min((totalXp / xpForNextLevel) * 100, 100);
+  const xpProgress = Math.min((totalXp / 100) * 100, 100);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 pb-20">
-      {/* Header */}
-      <header className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Your Hero</h1>
-          <p className="text-slate-400 text-sm">Level 1 Novice</p>
+    <main className="min-h-screen bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:24px_24px] text-gray-900 p-4 pb-24 overflow-x-hidden">
+      {/* 1. Character Card */}
+      <section className="bg-white border-4 border-gray-900 rounded-xl shadow-hard-lg mb-8 p-4 flex gap-4 relative transform -rotate-1">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-500 border-2 border-gray-900 shadow-sm z-10"></div>
+        <div className="w-24 h-32 bg-sky-100 border-2 border-gray-900 rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-hard">
+          <Image
+            src="/character-placeholder.png"
+            alt="Character"
+            width={80}
+            height={100}
+            className="object-contain drop-shadow-md"
+          />
         </div>
-        <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center font-bold">
-          {/* Initials placeholder */}H
-        </div>
-      </header>
-
-      {/* THE VISUAL STAGE (Placeholder for your Art) */}
-      <section className="bg-slate-900 rounded-2xl aspect-[4/5] border border-slate-800 mb-6 flex items-center justify-center relative overflow-hidden shadow-2xl">
-        {/* This is where your layered SVGs will go later */}
-        <p className="text-slate-500 text-xs uppercase tracking-widest">
-          Character Visualizer
-        </p>
-
-        {/* Debugging: Show that data is real */}
-        <div className="absolute bottom-4 left-4 bg-black/50 p-2 rounded text-xs">
-          Streak: {stats.current_streak} Days
+        <div className="flex-1 flex flex-col justify-center z-0">
+          <div className="bg-yellow-300 border-2 border-gray-900 px-3 py-1 rounded-full w-fit mb-2 shadow-hard transform -rotate-2">
+            <h1 className="text-xl font-black text-gray-900 uppercase tracking-wide">
+              {username}
+            </h1>
+          </div>
+          <div className="relative mt-2">
+            <div className="flex justify-between text-xs font-bold mb-1 pl-1">
+              <span>LVL 1</span>
+              <span>EXP</span>
+            </div>
+            <div className="h-6 bg-gray-900 rounded-full p-1 shadow-hard">
+              <div
+                className="h-full bg-gradient-to-r from-green-400 to-green-300 rounded-full border border-black relative overflow-hidden transition-all duration-500"
+                style={{ width: `${Math.max(xpProgress, 10)}%` }}
+              >
+                <div className="absolute top-0 left-0 w-full h-1/2 bg-white opacity-30 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Staggered Stat Cards */}
-      <section className="space-y-[-8px]">
-        <StatCard
-          label="Strength"
-          value={stats?.strength_xp || 0}
-          offset="left"
-          rotation={-2}
-        />
-        <StatCard
-          label="Dexterity"
-          value={stats?.dexterity_xp || 0}
-          offset="right"
-          rotation={1}
-        />
-        <StatCard
-          label="Constitution"
-          value={stats?.constitution_xp || 0}
-          offset="left"
-          rotation={-1}
-        />
-        <StatCard
-          label="Intelligence"
-          value={stats?.intelligence_xp || 0}
-          offset="right"
-          rotation={2}
-        />
-        <StatCard
-          label="Wisdom"
-          value={stats?.wisdom_xp || 0}
-          offset="left"
-          rotation={-1.5}
-        />
-        <StatCard
-          label="Charisma"
-          value={stats?.charisma_xp || 0}
-          offset="right"
-          rotation={1}
-        />
+      {/* 2. STAMP RALLY (New!) */}
+      <StampRally streak={stats?.streak || 0} />
+
+      {/* 3. Quest Board */}
+      <QuestBoard />
+
+      {/* 4. Stats Section */}
+      <section className="space-y-5 px-2">
+        <StatCard label="Strength" value={stats?.strength_xp || 0} />
+        <StatCard label="Dexterity" value={stats?.dexterity_xp || 0} />
+        <StatCard label="Constitution" value={stats?.constitution_xp || 0} />
+        <StatCard label="Intelligence" value={stats?.intelligence_xp || 0} />
+        <StatCard label="Wisdom" value={stats?.wisdom_xp || 0} />
+        <StatCard label="Charisma" value={stats?.charisma_xp || 0} />
       </section>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 px-6 py-3">
-        <div className="flex justify-around items-center max-w-md mx-auto">
-          <NavItem icon={<Home size={24} />} label="Home" active />
-          <NavItem icon={<Swords size={24} />} label="Quests" />
-          <NavItem icon={<User size={24} />} label="Profile" />
-          <NavItem icon={<Settings size={24} />} label="Settings" />
+      {/* 5. Bottom Navigation */}
+      <nav className="fixed bottom-4 left-4 right-4 bg-white border-2 border-gray-900 rounded-full shadow-hard-lg px-6 py-3 z-50">
+        <div className="flex justify-around items-center">
+          <NavItem
+            href="/"
+            icon={<Home size={28} strokeWidth={2.5} />}
+            label="Home"
+            active
+          />
+          <NavItem
+            href="/roulette"
+            icon={<Swords size={28} strokeWidth={2.5} />}
+            label="Quests"
+          />
+          <NavItem
+            href="/profile"
+            icon={<User size={28} strokeWidth={2.5} />}
+            label="Profile"
+          />
+          <NavItem
+            href="/schedule"
+            icon={<Calendar size={28} strokeWidth={2.5} />}
+            label="Schedule"
+          />
         </div>
       </nav>
     </main>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  offset,
-  rotation,
-}: {
-  label: string;
-  value: number;
-  offset: "left" | "right";
-  rotation: number;
-}) {
-  return (
-    <div
-      className={`bg-white border-2 border-gray-300 rounded-xl p-4 shadow-md relative ${
-        offset === "left" ? "mr-8" : "ml-8"
-      }`}
-      style={{ transform: `rotate(${rotation}deg)` }}
-    >
-      <div className="flex justify-between items-center">
-        <span className="font-bold text-gray-800 text-lg">{label}</span>
-        <span className="font-mono text-gray-600 text-lg">{value}</span>
-      </div>
-    </div>
-  );
-}
-
-function NavItem({
-  icon,
-  label,
-  active = false,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <button
-      className={`flex flex-col items-center gap-1 ${
-        active ? "text-white" : "text-gray-500"
-      }`}
-    >
-      {icon}
-      <span className="text-xs">{label}</span>
-    </button>
   );
 }
