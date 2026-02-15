@@ -72,35 +72,6 @@ export default function SchedulePage() {
           </div>
         </div>
       )}
-
-      {/* Navigation - Updated 4th Icon */}
-      <nav className="fixed bottom-4 left-4 right-4 bg-white border-2 border-gray-900 rounded-full shadow-hard-lg px-6 py-3 z-50">
-        <div className="flex justify-around items-center">
-          <NavItem
-            href="/"
-            icon={<Home size={28} strokeWidth={2.5} />}
-            label="Home"
-          />
-          <NavItem
-            href="/roulette"
-            icon={<Swords size={28} strokeWidth={2.5} />}
-            label="Quests"
-          />
-          <NavItem
-            href="/profile"
-            icon={<User size={28} strokeWidth={2.5} />}
-            label="Profile"
-          />
-
-          {/* Changed 'Settings' to 'Schedule' */}
-          <NavItem
-            href="/schedule"
-            icon={<Calendar size={28} strokeWidth={2.5} />}
-            label="Schedule"
-            active
-          />
-        </div>
-      </nav>
     </main>
   );
 }

@@ -151,35 +151,6 @@ export default function RoulettePage() {
           </div>
         )}
       </div>
-
-      {/* Bottom Navigation for Roulette Page */}
-      <nav className="fixed bottom-4 left-4 right-4 bg-white border-2 border-gray-900 rounded-full shadow-hard-lg px-6 py-3 z-50">
-        <div className="flex justify-around items-center">
-          <NavItem
-            href="/"
-            icon={<Home size={28} strokeWidth={2.5} />}
-            label="Home"
-          />
-
-          <NavItem
-            href="/roulette"
-            icon={<Swords size={28} strokeWidth={2.5} />}
-            label="Quests"
-            active
-          />
-
-          <NavItem
-            href="/profile"
-            icon={<User size={28} strokeWidth={2.5} />}
-            label="Profile"
-          />
-          <NavItem
-            href="/schedule"
-            icon={<Calendar size={28} strokeWidth={2.5} />}
-            label="Schedule"
-          />
-        </div>
-      </nav>
     </main>
   );
 }
