@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Star } from "lucide-react";
+import { clear } from "console";
 
 export function StampRally({ streak = 0 }: { streak?: number }) {
   const totalSlots = 7;
